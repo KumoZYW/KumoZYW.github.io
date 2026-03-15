@@ -2,23 +2,162 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>我的个人学习主页</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yunwen - Personal Portfolio</title>
     <style>
-        body { font-family: sans-serif; line-height: 1.6; margin: 40px auto; max-width: 650px; padding: 0 10px; }
-        h1 { color: #333; }
-        p { color: #666; }
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --bg-color: #f8f9fa;
+            --text-color: #333;
+            --card-bg: #ffffff;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 3rem 1rem;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-top: 0.5rem;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        h2 {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 0.5rem;
+            margin-top: 0;
+        }
+
+        .tag-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .tag {
+            background-color: #e1f0fa;
+            color: var(--secondary-color);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        ul {
+            padding-left: 1.5rem;
+        }
+
+        a {
+            color: var(--secondary-color);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+            font-size: 0.9rem;
+        }
     </style>
 </head>
 <body>
-    <h1>欢迎来到我的学习空间 🚀</h1>
-    <p>这是我在 GitHub Pages 上的第一个网页！</p>
-    <p>我将在这里记录我的学习进度、笔记和有趣的想法。</p>
-    
-    <h2>当前的重点学习内容：</h2>
-    <ul>
-        <li>HTML / CSS 基础</li>
-        <li>Python 编程</li>
-        <li>阅读笔记</li>
-    </ul>
+
+    <header>
+        <h1>Yunwen</h1>
+        <p>PhD Student | Researcher | Engineer</p>
+    </header>
+
+    <div class="container">
+        <section class="card">
+            <h2>About Me</h2>
+            <p>Welcome to my personal page! I am a PhD student at Nanyang Technological University (NTU), School of Civil and Environmental Engineering (CEE). My passion lies in applying advanced computational methods and AI to solve complex engineering challenges.</p>
+        </section>
+
+        <section class="card">
+            <h2>Research & Learning Focus</h2>
+            <ul>
+                <li><strong>Structural Health Monitoring (SHM):</strong> Operational Modal Analysis (OMA), model updating, and system identification.</li>
+                <li><strong>Structural Dynamics & Control Theory:</strong> Analysis of linear systems and vibration control.</li>
+                <li><strong>Artificial Intelligence:</strong> Deep learning, machine learning, and neural network architectures (SOM, RBF).</li>
+            </ul>
+        </section>
+
+        <section class="card">
+            <h2>Recent Projects & Experiments</h2>
+            <h3>Multi-Setup Vibration Test</h3>
+            <p>Designed and conducted comprehensive vibration tests on a three-span continuous beam footbridge (with cantilever) at Yunnan Garden. The experiment involved strategic sensor placement across multiple setups and detailed data processing.</p>
+            
+            <h3>Learning Log</h3>
+            <p>Currently expanding my skill set in statistical methods, machine learning, and exploring the intersection of traditional engineering with AI.</p>
+        </section>
+
+        <section class="card">
+            <h2>Technical Skills</h2>
+            <div class="tag-container">
+                <span class="tag">MATLAB</span>
+                <span class="tag">Python</span>
+                <span class="tag">Data Analysis</span>
+                <span class="tag">Signal Processing</span>
+                <span class="tag">Machine Learning</span>
+            </div>
+        </section>
+
+        <section class="card">
+            <h2>Connect</h2>
+            <p>Feel free to reach out for discussions on research, tech, or collaborations.</p>
+            <ul>
+                <li>Email: <a href="mailto:your.email@example.com">your.email@example.com</a></li>
+                <li>GitHub: <a href="https://github.com/yourusername">@yourusername</a></li>
+            </ul>
+        </section>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Yunwen. Built with HTML & CSS on GitHub Pages.</p>
+    </footer>
+
 </body>
 </html>
