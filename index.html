@@ -1,158 +1,1339 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>施工中🚧</title>
+    <link rel="icon" type="image/png" href="./images/index/star.png">
+    <title>欢迎来到我的小窝</title>
     <style>
-        :root {
-            --primary-color: #2c3e50;
-            --secondary-color: #3498db;
-            --bg-color: #f8f9fa;
-            --text-color: #333;
-            --card-bg: #ffffff;
+        /* 基础重置与全局样式 */
+        @font-face {
+            font-family: 'WangXiZhi';
+            src: url('./fonts/wangxizhi-subset.woff2') format('woff2');
+            font-weight: normal;
+            font-style: normal;
+            font-display: swap;
+            /* 优化加载体验 */
         }
-        
+
+        /* --- 隐藏滚动条 --- */
+        html,
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            scrollbar-width: none;
+            /* 针对 Firefox */
+            -ms-overflow-style: none;
+            /* 针对 IE 和 Edge */
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            color: #333;
+            background-color: #fafafa;
             line-height: 1.6;
-            color: var(--text-color);
-            background-color: var(--bg-color);
+            width: 100%;
+            overflow-x: hidden;
+        }
+
+        html::-webkit-scrollbar,
+        body::-webkit-scrollbar {
+            display: none;
+            /* 针对 Chrome, Safari 和 Opera */
+        }
+
+        * {
             margin: 0;
             padding: 0;
+            box-sizing: border-box;
         }
 
-        header {
-            background-color: var(--primary-color);
-            color: white;
-            text-align: center;
-            padding: 3rem 1rem;
-        }
-
-        header h1 {
-            margin: 0;
-            font-size: 2.5rem;
-        }
-
-        header p {
-            font-size: 1.2rem;
-            opacity: 0.9;
-            margin-top: 0.5rem;
-        }
-
-        .container {
-            max-width: 800px;
-            margin: 2rem auto;
-            padding: 0 1.5rem;
-        }
-
-        .card {
-            background: var(--card-bg);
-            border-radius: 8px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            transition: transform 0.3s ease;
-        }
-
-        .card:hover {
-            transform: translateY(-5px);
-        }
-
-        h2 {
-            color: var(--primary-color);
-            border-bottom: 2px solid var(--secondary-color);
-            padding-bottom: 0.5rem;
-            margin-top: 0;
-        }
-
-        .tag-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            margin-top: 1rem;
-        }
-
-        .tag {
-            background-color: #e1f0fa;
-            color: var(--secondary-color);
-            padding: 0.3rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
-
-        ul {
-            padding-left: 1.5rem;
+        .no-scroll {
+            overflow: hidden !important;
         }
 
         a {
-            color: var(--secondary-color);
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* ----------------------------------
+            页面主容器
+            ---------------------------------- */
+        .main-wrapper {
+            position: relative;
+            width: 100%;
+            min-height: 100vh;
+            background-color: #fafafa;
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 1;
+            overflow-x: hidden;
+        }
+
+        .main-wrapper.menu-open {
+            transform: translateX(calc(-100% + 120px));
+            pointer-events: none;
+            user-select: none;
+        }
+
+        .main-wrapper.menu-open #openMenuBtn {
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            transition: background-color 0.3s ease;
+        }
+
+        /* 将 Logo 改为可点击的状态 */
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+            color: #0000ff;
+        }
+
+        .logo:hover {
+            opacity: 0.7;
+        }
+
+        .menu-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 18px;
+            color: #0000ff;
+            cursor: pointer;
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+            letter-spacing: 3px;
+        }
+
+        .menu-btn:hover {
+            opacity: 0.7;
+        }
+
+        .menu-icon-svg {
+            display: block;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        /* 滑鼠悬停时，图标稍微向右移动一点点，增加互动感 */
+        .menu-btn:hover .menu-icon-svg {
+            transform: translateX(3px);
+            opacity: 0.7;
+        }
+
+        /* ----------------------------------
+            点击空白处关闭菜单的遮罩层
+            ---------------------------------- */
+        .menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background-color: transparent;
+            z-index: 990;
+            visibility: hidden;
+            cursor: w-resize;
+        }
+
+        .menu-overlay.active {
+            visibility: visible;
+        }
+
+        /* ----------------------------------
+            侧滑抽屉菜单 (Side Menu)
+            ---------------------------------- */
+        .side-menu {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: calc(100% - 90px);
+            height: 100vh;
+            background-image:
+                /* 半透明黑色遮罩，0.4 是透明度 */
+                linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+                url('./images/index/sidemenu.jpg');
+            background-size: cover;
+            /* 让图片按比例缩放，完全填满整个侧边栏 */
+            background-position: center;
+            /* 保证图片始终居中显示 */
+            background-repeat: no-repeat;
+            /* 防止图片不够大时重复平铺 */
+            color: white;
+            z-index: 999;
+            display: flex;
+            flex-direction: column;
+            border-top-left-radius: 24px;
+            box-shadow: -10px 0 40px rgba(0, 0, 0, 0.15);
+            transform: translateX(100%);
+            visibility: hidden;
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), visibility 0.6s;
+            overflow: hidden;
+        }
+
+        .side-menu.active {
+            transform: translateX(0);
+            visibility: visible;
+        }
+
+        .menu-header {
+            padding: 20px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .close-btn {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 18px;
+            color: white;
+            cursor: pointer;
+            transition: opacity 0.3s ease;
+            letter-spacing: 3px;
+        }
+
+        .close-btn:hover {
+            opacity: 0.7;
+        }
+
+        .close-icon-svg {
+            display: block;
+            transition: transform 0.2s ease;
+        }
+
+        /* 增加一点互动细节：悬停时让叉叉稍微旋转 */
+        .close-btn:hover .close-icon-svg {
+            transform: rotate(720deg);
+        }
+
+        /* ----------------------------------
+        侧边栏左侧花体字标语
+        ---------------------------------- */
+        .menu-slogan {
+            position: absolute;
+            left: 8vw;
+            top: 50%;
+            transform: translateY(-50%);
+            font-family: 'WangXiZhi', 'KaiTi', 'STKaiti', serif;
+            font-size: clamp(2.5rem, 4vw, 4.5rem);
+            color: rgba(255, 255, 255, 0.7);
+            pointer-events: none;
+
+            /* 改为弹性盒子，让两行文字竖向排列 */
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            letter-spacing: 4px;
+        }
+
+        /* 给每一行单独设置初始遮罩 */
+        .slogan-line {
+            clip-path: inset(0 100% 0 0);
+            /* 每行的书写速度设为 1.2 秒 */
+            transition: clip-path 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+            padding: 0 20px;
+            /* 把文字往左拉回 20px，抵消掉 padding 造成的错位 */
+            margin-left: -20px;
+            white-space: nowrap;
+            /* 确保文字绝对不换行 */
+        }
+
+        .slogan-line:nth-child(2) {
+            transform: translateX(2em);
+        }
+
+        .alt-char {
+            font-feature-settings: "aalt" 1;
+
+            /* 可选微调 */
+            /* font-size: 1.1em; */
+            /* transform: translateX(-2px) translateY(2px); */
+            display: inline-block;
+        }
+
+        /* 侧边栏打开时，依次撤掉遮罩 */
+        /* 第一行：延迟 0.4 秒开始写 */
+        .side-menu.active .slogan-line:nth-child(1) {
+            clip-path: inset(0 0 0 0);
+            transition-delay: 0.4s;
+        }
+
+        /* 第二行：延迟 1.2 秒开始写 */
+        .side-menu.active .slogan-line:nth-child(2) {
+            clip-path: inset(0 0 0 0);
+            transition-delay: 1.2s;
+        }
+
+        /* 移动端适配 */
+        @media (max-width: 960px) {
+            .menu-slogan {
+                top: auto;
+                bottom: 80px;
+                left: 40px;
+                transform: none;
+                font-size: 2rem;
+                gap: 5px;
+                /* 手机上两行字稍微凑近一点 */
+            }
+        }
+
+        .menu-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding-left: clamp(40px, 57%, 1000px);
+            min-height: max-content;
+            padding-right: 40px;
+            margin-top: 0vh;
+            /* 调整顶部间距 */
+        }
+
+        .nav-label {
+            font-size: 12px;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .large-links {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 50px;
+        }
+
+        .large-links a {
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            font-weight: 300;
+            letter-spacing: 10px;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+            transform-origin: left center;
+            display: inline-block;
+            white-space: nowrap;
+            outline: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .large-links a:hover {
+            transform: translateX(20px);
+            opacity: 0.7;
+        }
+
+        /* 底部区域 */
+        .bottom-links {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-left: 10px;
+
+        }
+
+        /* 统一控制字号和样式 */
+        .about-link,
+        .contact-text {
+            font-size: 1.2rem;
+            font-weight: 300;
+            letter-spacing: 6px;
+            color: white;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .about-link {
+            transition: opacity 0.3s ease;
+        }
+
+        .about-link:hover {
+            opacity: 0.7;
+        }
+
+        /* 让“联系我”与 Github 图标在同一行 */
+        .contact-row {
+            display: flex;
+            align-items: center;
+            gap: 60px;
+            /* 文字与图标之间的左右间距 */
+        }
+
+        .github-icon {
+            display: flex;
+            align-items: center;
+            color: white;
+            transition: opacity 0.3s ease;
+        }
+
+        .github-icon:hover {
+            opacity: 0.7;
+        }
+
+        /* ----------------------------------
+            轮播图 (Hero Carousel) 
+            ---------------------------------- */
+        .hero {
+            position: relative;
+            height: 100vh;
+            width: 100%;
+            overflow: hidden;
+            background-color: #111;
+        }
+
+        .carousel-track {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .carousel-slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 0.8s ease-in-out;
+            color: white;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            z-index: 1;
             text-decoration: none;
         }
 
-        a:hover {
-            text-decoration: underline;
+        .carousel-slide.active {
+            opacity: 1;
+            z-index: 2;
         }
 
-        footer {
-            text-align: center;
-            padding: 2rem;
+        /* 固定不动的蓝色“探索”字样 */
+        .static-hero-title {
+            position: absolute;
+            bottom: 12%;
+            left: 8%;
+            font-size: clamp(3rem, 8vw, 5rem);
+            font-weight: bold;
+            letter-spacing: 8px;
+            color: #0000ff;
+            z-index: 10;
+            margin: 0;
+            pointer-events: none;
+        }
+
+        /* 动态变化的部分字样 (世界、科学...) */
+        .slide-title {
+            position: absolute;
+            bottom: 12%;
+            left: 8%;
+            font-size: clamp(3rem, 8vw, 5rem);
+            font-weight: bold;
+            letter-spacing: 8px;
+            margin: 0;
+            color: white;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        /* 占位符类，用来隐藏每张图里前面的“探索”两字，推移后边的字 */
+        .hidden-placeholder {
+            visibility: hidden;
+        }
+
+        /* 左右箭头 */
+        .carousel-arrow {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 10;
+            transition: background 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            backdrop-filter: blur(4px);
+        }
+
+        .carousel-arrow:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        .arrow-left {
+            left: 40px;
+        }
+
+        .arrow-right {
+            right: 40px;
+        }
+
+        /* 底部指示点 */
+        .carousel-dots {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 12px;
+            z-index: 10;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            background-color: rgba(255, 255, 255, 0.4);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        .dot:hover {
+            background-color: rgba(255, 255, 255, 0.8);
+        }
+
+        .dot.active {
+            background-color: white;
+            transform: scale(1.3);
+        }
+
+        /* ----------------------------------
+            通用动画类
+            ---------------------------------- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* ----------------------------------
+            全新的 About 模块
+            ---------------------------------- */
+        .about-module {
+            background-color: #fff;
+            padding: 120px 8vw;
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+        }
+
+        .about-container {
+            display: flex;
+            gap: 60px;
+            max-width: 1400px;
+            margin: 0 auto;
+            align-items: stretch;
+            width: 100%;
+        }
+
+        /* 左侧竖向文本和横线区 */
+        .about-sidebar {
+            flex: 0 0 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            /* 调整 padding-top 来将横线对齐 Kumo 标题文本顶部 */
+            padding-top: 10px;
+            gap: 10px;
+            /* 线和文字之间的距离 */
+        }
+
+        .sidebar-line {
+            width: 100%;
+            /* 横线宽度填满侧边栏区域（30px） */
+            height: 2px;
+            background-color: #0000ff;
+            /* 蓝色 */
+        }
+
+        .sidebar-text {
+            writing-mode: vertical-rl;
+            color: #0000ff;
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            transform: translateX(-1px);
+        }
+
+        /* 中间文字内容区 */
+        .about-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding-right: 20px;
+        }
+
+        .main-title {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            color: #0000ff;
+            /* 蓝色 */
+            text-transform: uppercase;
+            letter-spacing: 6px;
+            margin-bottom: 40px;
+            line-height: 1;
+            /* 消除标题默认 margin-top，便于通过侧边栏对齐横线 */
+            margin-top: 0;
+        }
+
+        .info-list {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            margin-bottom: 40px;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: #333;
+            /* 灰色 */
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .info-icon {
+            width: 22px;
+            height: 22px;
+            color: #333;
+        }
+
+        .text-description p {
+            color: #333;
+            /* 灰色 */
+            font-size: 1rem;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            text-align: justify;
+        }
+
+        /* 右侧肖像图区域 */
+        .about-image-wrapper {
+            flex: 1;
+            max-width: 45%;
+            display: flex;
+            align-items: start;
+            /* 让照片容器顶部对齐其他内容顶部 */
+            justify-content: center;
+            padding-top: 0px;
+            /* 如果需要可以调整顶部留白 */
+        }
+
+        .portrait-img {
+            width: 50%;
+            height: auto;
+            max-width: 100%;
+            aspect-ratio: 1 / 1;
+            object-fit: cover;
+            border-radius: 50%;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            transition: transform 0.6s ease;
+            margin-top: 50px;
+        }
+
+        .portrait-img:hover {
+            transform: scale(1.02);
+        }
+
+        /* 响应式调整 */
+        @media (max-width: 960px) {
+            .about-container {
+                flex-direction: column;
+                gap: 40px;
+            }
+
+            .about-sidebar {
+                flex: none;
+                padding-top: 0;
+                flex-direction: row;
+                /* 在移动端将线和字排成一行 */
+                align-items: center;
+            }
+
+            .sidebar-line {
+                width: 30px;
+                /* 在移动端线恢复为水平且长度固定 */
+                height: 2px;
+            }
+
+            .sidebar-text {
+                writing-mode: horizontal-tb;
+                transform: none;
+            }
+
+            .about-image-wrapper {
+                max-width: 100%;
+                order: -1;
+                /* 在移动端让图片排在上方 */
+                padding-top: 0;
+            }
+
+            .about-content {
+                padding-right: 0;
+            }
+        }
+
+        /* ----------------------------------
+            全新的 Works 模块
+            ---------------------------------- */
+        .works-module {
+            background-color: #fff;
+            padding: 80px 8vw 120px 8vw;
+        }
+
+        .works-container {
+            display: flex;
+            gap: 60px;
+            max-width: 1400px;
+            margin: 0 auto;
+            align-items: flex-start;
+            width: 100%;
+        }
+
+        /* 左侧复用 About 的侧边栏结构，只需调整顶部对齐 */
+        .works-sidebar {
+            flex: 0 0 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 0px;
+            /* 调整此值以对齐右侧第一根横线 */
+            gap: 10px;
+        }
+
+        /* 右侧列表区域 */
+        .works-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .work-list-item {
+            border-top: 1px solid #0000ff;
+            /* 蓝色分割线 */
+            color: #0000ff;
+        }
+
+        /* 最后一个元素加上底边框 */
+        .work-list-item:last-child {
+            border-bottom: 1px solid #0000ff;
+        }
+
+        /* 列表常驻显示头部 (时间和名称) */
+        .work-header {
+            display: flex;
+            padding: 30px 0;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: opacity 0.3s ease;
+        }
+
+        .work-header:hover {
+            opacity: 0.7;
+        }
+
+        .work-author {
+            flex: 0 0 220px;
+            /* 控制列的宽度 */
+            font-weight: 500;
+        }
+
+        .work-name {
+            flex: 1;
+            font-weight: 500;
+        }
+
+        .work-date {
+            flex: 0 0 150px;
+            font-weight: 500;
+        }
+
+        /* 隐藏的展开内容区 (使用 grid 动画实现平滑展开) */
+        .work-body {
+            display: grid;
+            grid-template-rows: 0fr;
+            transition: grid-template-rows 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .work-body-inner {
+            overflow: hidden;
+            display: flex;
+            justify-content: flex-end;
+            /* 将图片推到右半边 */
+        }
+
+        /* 鼠标悬停在 item 上时展开 */
+        .work-list-item:hover .work-body {
+            grid-template-rows: 1fr;
+        }
+
+        /* 照片容器占右半部分 */
+        .work-img-wrapper {
+            width: 50%;
+            padding-bottom: 30px;
+            /* 给下方留点空隙 */
+        }
+
+        .work-list-item-link {
+            text-decoration: none;
+            /* 去掉下划线 */
+            color: inherit;
+            /* 继承父级颜色，保持原样 */
+            display: block;
+            /* 让链接撑满整个项目宽度 */
+        }
+
+        .work-img-wrapper img {
+            height: 250px;
+            width: auto;
+            aspect-ratio: 16 / 9;
+            object-fit: cover;
+            border-radius: 5px;
+            /*添加圆角属性 */
+            display: block;
+            margin-left: auto;
+        }
+
+        /* Works 模块响应式调整 */
+        @media (max-width: 960px) {
+            .works-container {
+                flex-direction: column;
+                gap: 40px;
+            }
+
+            .works-sidebar {
+                flex: none;
+                flex-direction: row;
+                padding-top: 0;
+                align-items: center;
+            }
+
+            .work-header {
+                flex-direction: column;
+                gap: 10px;
+                padding: 20px 0;
+            }
+
+            .work-author,
+            .work-date {
+                flex: none;
+                font-size: 0.9rem;
+            }
+
+            .work-img-wrapper {
+                width: 100%;
+                height: auto;
+                /* 移动端图片占满全宽 */
+            }
+        }
+
+        /* ----------------------------------
+            页脚模块 (Footer)
+            ---------------------------------- */
+        .site-footer {
+            background-color: #fafafa;
+            /* 和网页主体背景色保持一致 */
+            padding: 80px 8vw 40px 8vw;
+            color: #0000ff;
+            border-top: 1px solid rgba(0, 0, 255, 0.1);
+        }
+
+        .footer-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 60px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid rgba(0, 0, 255, 0.1);
+        }
+
+        /* 导航链接 */
+        .footer-nav {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            /* 设为 0，让蓝色色块精准起止于 | */
+            font-size: 1.2rem;
+            font-weight: 500;
+        }
+
+        .footer-nav .pipe {
+            color: #0000ff;
+            font-weight: 300;
+            margin: 0;
+            padding: 0;
+            line-height: 1;
+            /* 取消默认行高的干扰，确保对齐 */
+        }
+
+        .footer-nav a {
+            color: #0000ff;
+            text-decoration: none;
+
+            /*  控制 | 到文字的空隙。 */
+            padding: 4px 12px;
+
+            /* 增加词内部的字间距 */
+            letter-spacing: 12px;
+
+            /* 为了视觉居中平衡，抵消掉 letter-spacing 在最后一个字右侧产生的额外宽度 */
+            text-indent: 12px;
+
+            position: relative;
+            z-index: 1;
+            transition: color 0.3s ease;
+            line-height: 1;
+            /* 强制行高，让色块高度和 | 严格等高 */
+            display: inline-block;
+        }
+
+        .footer-nav a::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 100%;
+            background-color: #0000ff;
+            z-index: -1;
+            /* 稍微调整了一下动画曲线，让填满的那一下看起来更有质感 */
+            transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .footer-nav a:hover {
+            color: #ffffff;
+        }
+
+        .footer-nav a:hover::before {
+            width: 100%;
+        }
+
+        /* GitHub 图标 */
+        .footer-social a {
+            color: #0000ff;
+            display: flex;
+            align-items: center;
+            transition: opacity 0.3s ease;
+        }
+
+        .footer-social a:hover {
+            opacity: 0.6;
+        }
+
+        /* 底部信息区 */
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
             color: #666;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
+        }
+
+        .copyright {
+            flex: 1;
+        }
+
+        /* 中间的彩蛋文字 */
+        .mariana-text {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #999;
+            font-style: italic;
+            letter-spacing: 1px;
+        }
+
+        /* 回到顶部按钮 */
+        .back-to-top-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border: 1px solid #0000ff;
+            color: #0000ff;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .back-to-top-btn:hover {
+            background-color: #0000ff;
+            color: #ffffff;
+        }
+
+        /* 页脚响应式调整 */
+        @media (max-width: 960px) {
+            .footer-top {
+                flex-direction: column;
+                gap: 40px;
+            }
+
+            .footer-bottom {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+
+            .mariana-text {
+                position: static;
+                transform: none;
+            }
         }
     </style>
 </head>
+
 <body>
 
-    <header>
-        <h1>Kumo</h1>
-        <p>PhD Student</p>
-    </header>
+    <div class="main-wrapper" id="mainWrapper">
 
-    <div class="container">
-        <section class="card">
-            <h2>About Me</h2>
-            <p>Welcome to my personal page! </p>
-        </section>
+        <header id="header">
+            <a href="#" class="logo" id="homeLogo">Kumo</a>
+            <div class="menu-btn" id="openMenuBtn">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+                    stroke-linecap="round" stroke-linejoin="round" class="menu-icon-svg">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+                导航
+            </div>
+        </header>
 
-        <section class="card">
-            <h2>Research & Learning Focus</h2>
-            <ul>
-                <li><strong>Structural Health Monitoring (SHM):</strong> Operational Modal Analysis (OMA), model updating, and system identification.</li>
-                <li><strong>Structural Dynamics & Control Theory:</strong> Analysis of linear systems and vibration control.</li>
-                <li><strong>Artificial Intelligence:</strong> Deep learning and machine learning.</li>
-            </ul>
-        </section>
+        <section class="hero" id="topHero">
+            <h1 class="static-hero-title">探索</h1>
 
-        <section class="card">
-            <h2>Recent Projects & Experiments</h2>
-            <h3>Multi-Setup Vibration Test</h3>
-        </section>
+            <div class="carousel-track">
+                <a href="world.html" class="carousel-slide active"
+                    style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('./images/index/world.jpg');">
+                    <h1 class="slide-title"><span class="hidden-placeholder">探索</span>世界</h1>
+                </a>
 
-        <section class="card">
-            <h2>Technical Skills</h2>
-            <div class="tag-container">
-                <span class="tag">MATLAB</span>
-                <span class="tag">Python</span>
-                <span class="tag">Data Analysis</span>
-                <span class="tag">Signal Processing</span>
-                <span class="tag">Machine Learning</span>
+                <a href="science.html" class="carousel-slide"
+                    style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('./images/index/science.jpg');">
+                    <h1 class="slide-title"><span class="hidden-placeholder">探索</span>科学</h1>
+                </a>
+
+                <a href="art.html" class="carousel-slide"
+                    style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('./images/index/art.jpg');">
+                    <h1 class="slide-title"><span class="hidden-placeholder">探索</span>艺术</h1>
+                </a>
+
+                <a href="humanity.html" class="carousel-slide"
+                    style="background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('./images/index/humanity.jpg');">
+                    <h1 class="slide-title"><span class="hidden-placeholder">探索</span>自我</h1>
+                </a>
+            </div>
+
+            <button class="carousel-arrow arrow-left" id="prevSlide">&#10094;</button>
+            <button class="carousel-arrow arrow-right" id="nextSlide">&#10095;</button>
+
+            <div class="carousel-dots">
+                <div class="dot active" data-index="0"></div>
+                <div class="dot" data-index="1"></div>
+                <div class="dot" data-index="2"></div>
+                <div class="dot" data-index="3"></div>
             </div>
         </section>
 
-        <section class="card">
-            <h2>Connect</h2>
-            <p>Feel free to reach out for discussions on research, tech, or collaborations.</p>
-            <ul>
-                <li>GitHub: <a href="https://github.com/KumoZYW">@KumoZYW</a></li>
-            </ul>
+        <section id="about-module" class="about-module">
+            <div class="about-container">
+
+                <div class="about-sidebar reveal">
+                    <div class="sidebar-line"></div> <span class="sidebar-text">About</span>
+                </div>
+
+                <div class="about-content">
+                    <h2 class="main-title reveal">Kumo</h2>
+
+                    <div class="info-list reveal">
+                        <div class="info-item">
+                            <svg class="info-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M22 10v6M2 10l10-5 10 5-10 5z"></path>
+                                <path d="M6 12v5c3 3 9 3 12 0v-5"></path>
+                            </svg>
+                            <span>PhD Student</span>
+                        </div>
+                        <div class="info-item">
+                            <svg class="info-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M3 21h18"></path>
+                                <path
+                                    d="M3 7v1a3 3 0 0 0 6 0v-1m0 1a3 3 0 0 0 6 0v-1m0 1a3 3 0 0 0 6 0v-1h-18l2-4h14l2 4">
+                                </path>
+                                <path d="M4 21v-11"></path>
+                                <path d="M20 21v-11"></path>
+                                <path d="M8 21v-5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v5"></path>
+                            </svg>
+                            <span>Nanyang Technological University</span>
+                        </div>
+                    </div>
+
+                    <div class="text-description reveal">
+                        <p>没想到这里也被你找到了🫢这是我的小窝。堆得有点乱，还请见谅。当前仍在施工中🚧</p>
+                        <p>本网站用于归纳整理个人所用学习资料，当然，也有感兴趣的其他内容。此外，在这里也会上传一些游记，想法等等等等。如果对你有帮助，那就太好了！</p>
+                    </div>
+                </div>
+
+                <div class="about-image-wrapper reveal">
+                    <img src="./images/about/portrait.jpg" alt="Portrait Space" class="portrait-img">
+                </div>
+
+            </div>
         </section>
+
+        <section id="works-module" class="works-module">
+            <div class="works-container">
+
+                <div class="works-sidebar reveal">
+                    <div class="sidebar-line"></div>
+                    <span class="sidebar-text">Works</span>
+                </div>
+
+                <div class="works-content">
+
+                    <div class="work-list-item reveal">
+                        <div class="work-header">
+                            <span class="work-author">2026.03.20</span>
+                            <span class="work-name">Webpage Launch</span>
+                        </div>
+                        <div class="work-body">
+                            <div class="work-body-inner">
+                                <div class="work-img-wrapper">
+                                    <img src="./images/works/launch.jpg" alt="Webpage Launch">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </section>
+
+        <footer class="site-footer">
+            <div class="footer-top">
+                <div class="footer-nav">
+                    <span class="pipe">|</span>
+                    <a href="world.html">世界</a>
+                    <span class="pipe">|</span>
+                    <a href="science.html">科学</a>
+                    <span class="pipe">|</span>
+                    <a href="art.html">艺术</a>
+                    <span class="pipe">|</span>
+                    <a href="humanity.html">自我</a>
+                    <span class="pipe">|</span>
+                </div>
+                <div class="footer-social">
+                    <a href="https://github.com/KumoZYW" target="_blank" aria-label="GitHub">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
+                            <path
+                                d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+                        </svg>
+                    </a>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <div class="copyright">
+                    <p>© 2026 Kumo. All rights reserved.</p>
+                    <p style="font-size: 0.85em">Third-party images and content belong to their respective owners.</p>
+                </div>
+                <div class="mariana-text">欸，我们是到马里亚纳海沟了吗</div>
+                <div class="back-to-top-btn" id="footerBackToTop" title="回到顶部">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="19" x2="12" y2="5"></line>
+                        <polyline points="5 12 12 5 19 12"></polyline>
+                    </svg>
+                </div>
+            </div>
+        </footer>
+
     </div>
 
-    <footer>
-        <p>&copy; 2026 Kumo. Built with HTML & CSS on GitHub Pages.</p>
-    </footer>
+    <div class="menu-overlay" id="menuOverlay"></div>
 
+    <div class="side-menu" id="sideMenu">
+
+        <div class="menu-header">
+            <a href="#" class="logo" id="menuHomeLogo" style="color: white;">Kumo</a>
+            <div class="close-btn" id="closeMenuBtn">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"
+                    stroke-linecap="round" stroke-linejoin="round" class="close-icon-svg">
+                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+                返回
+            </div>
+        </div>
+
+        <div class="menu-slogan">
+            <span class="slogan-line">疏影橫斜<span class="alt-char">水</span>清淺</span>
+            <span class="slogan-line">暗香浮動月黃昏</span>
+        </div>
+
+        <div class="menu-content">
+            <div class="large-links">
+                <a href="world.html">世界</a>
+                <a href="science.html">科学</a>
+                <a href="art.html">艺术</a>
+                <a href="humanity.html">自我</a>
+            </div>
+
+            <div class="bottom-links">
+                <a href="#about-module" class="about-link" onclick="closeMenu()">关于我</a>
+
+                <div class="contact-row">
+                    <span class="contact-text">联系我</span> <a href="https://github.com/KumoZYW" target="_blank"
+                        class="github-icon" aria-label="GitHub">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
+                            <path
+                                d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ----------------------------------
+        // 侧边栏及遮罩层逻辑
+        // ----------------------------------
+        const openBtn = document.getElementById('openMenuBtn');
+        const closeBtn = document.getElementById('closeMenuBtn');
+        const sideMenu = document.getElementById('sideMenu');
+        const mainWrapper = document.getElementById('mainWrapper');
+        const menuOverlay = document.getElementById('menuOverlay');
+
+        const htmlElement = document.documentElement;
+        const bodyElement = document.body;
+
+        function openMenu() {
+            sideMenu.classList.add('active');
+            mainWrapper.classList.add('menu-open');
+            menuOverlay.classList.add('active');
+            htmlElement.classList.add('no-scroll');
+            bodyElement.classList.add('no-scroll');
+        }
+
+        function closeMenu() {
+            sideMenu.classList.remove('active');
+            mainWrapper.classList.remove('menu-open');
+            menuOverlay.classList.remove('active');
+            htmlElement.classList.remove('no-scroll');
+            bodyElement.classList.remove('no-scroll');
+        }
+
+        openBtn.addEventListener('click', openMenu);
+        closeBtn.addEventListener('click', closeMenu);
+        menuOverlay.addEventListener('click', closeMenu);
+
+        // ----------------------------------
+        // 点击 Logo 回到首页 
+        // ----------------------------------
+        const homeLogo = document.getElementById('homeLogo');
+        const menuHomeLogo = document.getElementById('menuHomeLogo');
+
+        function scrollToTop(e) {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            if (sideMenu.classList.contains('active')) {
+                closeMenu();
+            }
+        }
+
+        homeLogo.addEventListener('click', scrollToTop);
+        menuHomeLogo.addEventListener('click', scrollToTop);
+
+        // ----------------------------------
+        // 页面滚动动画逻辑 
+        // ----------------------------------
+        function reveal() {
+            const reveals = document.querySelectorAll(".reveal");
+            const windowHeight = window.innerHeight;
+            const elementVisible = 100;
+
+            for (let i = 0; i < reveals.length; i++) {
+                let elementTop = reveals[i].getBoundingClientRect().top;
+                if (elementTop < windowHeight - elementVisible) {
+                    reveals[i].classList.add("active");
+                }
+            }
+        }
+        window.addEventListener("scroll", reveal);
+        // 初始化执行一次
+        setTimeout(reveal, 100);
+
+        // ----------------------------------
+        // 轮播图逻辑
+        // ----------------------------------
+        const slides = document.querySelectorAll('.carousel-slide');
+        const dots = document.querySelectorAll('.dot');
+        const prevBtn = document.getElementById('prevSlide');
+        const nextBtn = document.getElementById('nextSlide');
+        let currentSlide = 0;
+        let slideInterval;
+
+        function goToSlide(index) {
+            slides[currentSlide].classList.remove('active');
+            dots[currentSlide].classList.remove('active');
+            currentSlide = (index + slides.length) % slides.length;
+            slides[currentSlide].classList.add('active');
+            dots[currentSlide].classList.add('active');
+        }
+
+        function nextSlide() { goToSlide(currentSlide + 1); }
+        function prevSlide() { goToSlide(currentSlide - 1); }
+
+        nextBtn.addEventListener('click', () => { nextSlide(); resetInterval(); });
+        prevBtn.addEventListener('click', () => { prevSlide(); resetInterval(); });
+
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                goToSlide(index);
+                resetInterval();
+            });
+        });
+
+        function startInterval() { slideInterval = setInterval(nextSlide, 5000); }
+        function resetInterval() { clearInterval(slideInterval); startInterval(); }
+
+        startInterval();
+        // ----------------------------------
+        // 页脚“回到顶部”逻辑
+        // ----------------------------------
+        const footerBackToTopBtn = document.getElementById('footerBackToTop');
+        if (footerBackToTopBtn) {
+            footerBackToTopBtn.addEventListener('click', () => {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        }
+    </script>
 </body>
+
 </html>
