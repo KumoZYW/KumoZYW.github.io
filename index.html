@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/png" href="./images/index/star.png">
     <title>欢迎来到我的小窝</title>
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data: https:; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self';">
+    <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; img-src 'self' data: https:; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self';">
     <style>
         /* 基础重置与全局样式 */
         @font-face {
@@ -278,19 +279,6 @@
             transition-delay: 1.2s;
         }
 
-        /* 移动端适配 */
-        @media (max-width: 960px) {
-            .menu-slogan {
-                top: auto;
-                bottom: 80px;
-                left: 40px;
-                transform: none;
-                font-size: 2rem;
-                gap: 5px;
-                /* 手机上两行字稍微凑近一点 */
-            }
-        }
-
         .menu-content {
             flex: 1;
             display: flex;
@@ -301,6 +289,25 @@
             padding-right: 40px;
             margin-top: 0vh;
             /* 调整顶部间距 */
+        }
+
+        @media (max-width: 960px) {
+            .menu-slogan {
+                top: auto;
+                bottom: 80px;
+                left: 30px;
+                transform: none;
+                font-size: 2rem;
+                gap: 5px;
+            }
+
+            .menu-content {
+                justify-content: flex-start;
+                /* 取消原来的垂直居中，改为整体靠上对齐 */
+                padding-top: 20%;
+                /* 控制距离顶部的距离 */
+                padding-left: 30%;
+            }
         }
 
         .nav-label {
@@ -455,33 +462,35 @@
         .carousel-arrow {
             position: absolute;
             top: 50%;
-            transform: translateY(-50%);
-            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-50%) scale(1);
+            background: transparent;
             color: white;
             border: none;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
+            width: 60px;
+            height: 80px;
             font-size: 24px;
             cursor: pointer;
             z-index: 10;
-            transition: background 0.3s ease;
+            transition: all 0.3s ease;
             display: flex;
             justify-content: center;
             align-items: center;
-            backdrop-filter: blur(4px);
+            backdrop-filter: none;
+            opacity: 0.6;
         }
 
         .carousel-arrow:hover {
-            background: rgba(255, 255, 255, 0.4);
+            background: transparent;
+            opacity: 1;
+            transform: translateY(-50%) scale(1.15);
         }
 
         .arrow-left {
-            left: 40px;
+            left: 20px;
         }
 
         .arrow-right {
-            right: 40px;
+            right: 20px;
         }
 
         /* 底部指示点 */
@@ -659,6 +668,14 @@
 
         /* 响应式调整 */
         @media (max-width: 960px) {
+            .arrow-left {
+                left: 0px;
+            }
+
+            .arrow-right {
+                right: 0px;
+            }
+
             .about-container {
                 flex-direction: column;
                 gap: 40px;
@@ -874,60 +891,68 @@
             display: flex;
             align-items: center;
             gap: 0;
-            /* 设为 0，让蓝色色块精准起止于 | */
             font-size: 1.2rem;
             font-weight: 500;
+            position: relative;
+            /* 让内部的绝对定位以它为准 */
+            z-index: 1;
         }
 
         .footer-nav .pipe {
             color: #0000ff;
             font-weight: 300;
             margin: 0;
-            padding: 0;
+            margin: 0 -4px;
+            /* 负值抵消 a 标签左右的 padding，确保 | 紧贴文字 */
             line-height: 1;
             /* 取消默认行高的干扰，确保对齐 */
+            position: relative;
+            top: -1px;
+            /* 降低视觉高度 */
+            z-index: 2;
+            /* 保证在滑块之上 */
+            pointer-events: none;
+            /* 防止竖线干扰鼠标悬停检测 */
         }
 
         .footer-nav a {
             color: #0000ff;
             text-decoration: none;
-
             /*  控制 | 到文字的空隙。 */
-            padding: 4px 12px;
-
+            padding: 0px 12px 0px 24px;
             /* 增加词内部的字间距 */
             letter-spacing: 12px;
-
-            /* 为了视觉居中平衡，抵消掉 letter-spacing 在最后一个字右侧产生的额外宽度 */
-            text-indent: 12px;
-
             position: relative;
-            z-index: 1;
+            z-index: 2;
+            /* 确保链接在竖线之上，避免被遮挡 */
             transition: color 0.3s ease;
             line-height: 1;
             /* 强制行高，让色块高度和 | 严格等高 */
             display: inline-block;
+            white-space: nowrap;
         }
 
-        .footer-nav a::before {
-            content: '';
+        .nav-slider {
             position: absolute;
             top: 0;
             left: 0;
-            width: 0;
             height: 100%;
             background-color: #0000ff;
-            z-index: -1;
-            /* 稍微调整了一下动画曲线，让填满的那一下看起来更有质感 */
-            transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            z-index: 0;
+            /* 放在底层，文字和竖线在它上面 */
+            opacity: 0;
+            /* 默认隐藏 */
+            pointer-events: none;
+            /* 防止滑块自己挡住鼠标事件 */
+
+            /* 位置和透明度都加上平滑过渡 */
+            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+                width 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+                opacity 0.3s ease;
         }
 
         .footer-nav a:hover {
             color: #ffffff;
-        }
-
-        .footer-nav a:hover::before {
-            width: 100%;
         }
 
         /* GitHub 图标 */
@@ -1001,6 +1026,12 @@
             .mariana-text {
                 position: static;
                 transform: none;
+            }
+
+            .footer-nav a {
+                letter-spacing: 8px;
+                /* 减小字间距，适应换行后的视觉效果 */
+                padding: 0 8px 0 16px;
             }
         }
     </style>
@@ -1138,6 +1169,7 @@
         <footer class="site-footer">
             <div class="footer-top">
                 <div class="footer-nav">
+                    <div class="nav-slider"></div>
                     <span class="pipe">|</span>
                     <a href="world.html">世界</a>
                     <span class="pipe">|</span>
@@ -1209,8 +1241,8 @@
                 <a href="#about-module" class="about-link" onclick="closeMenu()">关于我</a>
 
                 <div class="contact-row">
-                    <span class="contact-text">联系我</span> <a href="https://github.com/KumoZYW" target="_blank" rel="noopener noreferrer"
-                        class="github-icon" aria-label="GitHub">
+                    <span class="contact-text">联系我</span> <a href="https://github.com/KumoZYW" target="_blank"
+                        rel="noopener noreferrer" class="github-icon" aria-label="GitHub">
                         <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
                             <path
                                 d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z" />
@@ -1333,6 +1365,73 @@
             footerBackToTopBtn.addEventListener('click', () => {
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             });
+        }
+
+        // ----------------------------------
+        // 底部导航栏平滑滑动动画
+        // ----------------------------------
+        const footerNav = document.querySelector('.footer-nav');
+        const navSlider = document.querySelector('.nav-slider');
+
+        // 增加一层安全判断，防止在某些没有 footer-nav 的页面报错
+        if (footerNav && navSlider) {
+            let isInsideNav = false; // 状态开关：记录鼠标是否已经在导航栏内部
+
+            // 封装一个隐藏滑块的函数，方便随时调用
+            function hideSlider() {
+                if (!isInsideNav) return;
+                navSlider.style.transition = 'width 0.35s cubic-bezier(0.16, 1, 0.3, 1)';
+                navSlider.style.width = '0px';
+                isInsideNav = false;
+
+                setTimeout(() => {
+                    if (!isInsideNav) {
+                        navSlider.style.opacity = '0';
+                    }
+                }, 350);
+            }
+
+            // 采用 mouseover 事件委托，实时侦测鼠标当前所在的子元素
+            footerNav.addEventListener('mouseover', (e) => {
+                // 寻找鼠标所在的、且【不是】disabled 的 <a> 标签
+                const targetLink = e.target.closest('a:not(.disabled-link)');
+
+                if (targetLink && footerNav.contains(targetLink)) {
+                    // --- 鼠标悬停在有效的选项上 ---
+                    const left = targetLink.offsetLeft;
+                    const top = targetLink.offsetTop;
+                    const width = targetLink.offsetWidth;
+                    const height = targetLink.offsetHeight;
+
+                    navSlider.style.opacity = '1';
+
+                    if (!isInsideNav) {
+                        // 初次进入导航区，从 0 伸展
+                        navSlider.style.transition = 'none';
+                        navSlider.style.transform = `translate(${left}px, ${top}px)`;
+                        navSlider.style.width = '0px';
+                        navSlider.style.height = `${height}px`;
+
+                        void navSlider.offsetWidth;
+
+                        navSlider.style.transition = 'width 0.35s cubic-bezier(0.16, 1, 0.3, 1)';
+                        navSlider.style.width = `${width}px`;
+
+                        isInsideNav = true;
+                    } else {
+                        // 相邻选项之间平移滑动
+                        navSlider.style.transition = 'transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), width 0.35s cubic-bezier(0.16, 1, 0.3, 1)';
+                        navSlider.style.transform = `translate(${left}px, ${top}px)`;
+                        navSlider.style.width = `${width}px`;
+                    }
+                } else {
+                    // --- 鼠标滑动到了 disabled 选项、竖线 | 或者空白间隙上 ---
+                    hideSlider();
+                }
+            });
+
+            // --- 鼠标彻底离开底部导航区域 ---
+            footerNav.addEventListener('mouseleave', hideSlider);
         }
     </script>
 </body>

@@ -249,17 +249,6 @@ header {
     transition-delay: 1.2s;
 }
 
-@media (max-width: 960px) {
-    .menu-slogan {
-        top: auto;
-        bottom: 80px;
-        left: 40px;
-        transform: none;
-        font-size: 2rem;
-        gap: 5px;
-    }
-}
-
 .menu-content {
     flex: 1;
     display: flex;
@@ -269,6 +258,25 @@ header {
     min-height: max-content;
     padding-right: 40px;
     margin-top: 0;
+}
+
+@media (max-width: 960px) {
+    .menu-slogan {
+        top: auto;
+        bottom: 80px;
+        left: 30px;
+        transform: none;
+        font-size: 2rem;
+        gap: 5px;
+    }
+
+    .menu-content {
+        justify-content: flex-start;
+        /* 取消原来的垂直居中，改为整体靠上对齐 */
+        padding-top: 20%;
+        /* 控制距离顶部的距离 */
+        padding-left: 30%;
+    }
 }
 
 .large-links {
@@ -372,47 +380,59 @@ header {
     gap: 0;
     font-size: 1.2rem;
     font-weight: 500;
+    position: relative; /* 让内部的绝对定位以它为准 */
+    z-index: 1;
 }
 
 .footer-nav .pipe {
     color: #0000ff;
     font-weight: 300;
     margin: 0;
-    padding: 0;
+    margin: 0 -4px;
+    /* 负值抵消 a 标签左右的 padding，确保 | 紧贴文字 */
     line-height: 1;
+    /* 取消默认行高的干扰，确保对齐 */
+    position: relative;
+    top: -1px;
+    /* 降低视觉高度 */
+    z-index: 2; /* 保证在滑块之上 */
+    pointer-events: none; /* 防止竖线干扰鼠标悬停检测 */
 }
 
 .footer-nav a {
     color: #0000ff;
     text-decoration: none;
-    padding: 4px 12px;
+    /*  控制 | 到文字的空隙。 */
+    padding: 0px 12px 0px 24px;
+    /* 增加词内部的字间距 */
     letter-spacing: 12px;
-    text-indent: 12px;
     position: relative;
-    z-index: 1;
+    z-index: 2; /* 确保链接在竖线之上，避免被遮挡 */
     transition: color 0.3s ease;
     line-height: 1;
+    /* 强制行高，让色块高度和 | 严格等高 */
     display: inline-block;
+    white-space: nowrap;
 }
 
-.footer-nav a::before {
-    content: '';
+.nav-slider {
     position: absolute;
     top: 0;
     left: 0;
-    width: 0;
     height: 100%;
     background-color: #0000ff;
-    z-index: -1;
-    transition: width 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 0; /* 放在底层，文字和竖线在它上面 */
+    opacity: 0; /* 默认隐藏 */
+    pointer-events: none; /* 防止滑块自己挡住鼠标事件 */
+    
+    /* 位置和透明度都加上平滑过渡 */
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), 
+                width 0.35s cubic-bezier(0.16, 1, 0.3, 1), 
+                opacity 0.3s ease;
 }
 
 .footer-nav a:hover {
     color: #ffffff;
-}
-
-.footer-nav a:hover::before {
-    width: 100%;
 }
 
 .footer-social a {
@@ -481,6 +501,12 @@ header {
     .mariana-text {
         position: static;
         transform: none;
+    }
+
+    .footer-nav a {
+        letter-spacing: 10px;
+        /* 减小字间距，适应换行后的视觉效果 */
+        padding: 0 10px 0 20px;
     }
 }
 

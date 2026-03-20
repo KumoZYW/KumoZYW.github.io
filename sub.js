@@ -141,3 +141,70 @@ if (footerBackToTopBtn) {
         window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 }
+
+// ----------------------------------
+// 底部导航栏平滑滑动动画
+// ----------------------------------
+const footerNav = document.querySelector('.footer-nav');
+const navSlider = document.querySelector('.nav-slider');
+
+// 增加一层安全判断，防止在某些没有 footer-nav 的页面报错
+if (footerNav && navSlider) {
+    let isInsideNav = false; // 状态开关：记录鼠标是否已经在导航栏内部
+
+    // 封装一个隐藏滑块的函数，方便随时调用
+    function hideSlider() {
+        if (!isInsideNav) return;
+        navSlider.style.transition = 'width 0.35s cubic-bezier(0.16, 1, 0.3, 1)';
+        navSlider.style.width = '0px';
+        isInsideNav = false;
+        
+        setTimeout(() => {
+            if (!isInsideNav) {
+                navSlider.style.opacity = '0';
+            }
+        }, 350);
+    }
+
+    // 采用 mouseover 事件委托，实时侦测鼠标当前所在的子元素
+    footerNav.addEventListener('mouseover', (e) => {
+        // 寻找鼠标所在的、且【不是】disabled 的 <a> 标签
+        const targetLink = e.target.closest('a:not(.disabled-link)');
+        
+        if (targetLink && footerNav.contains(targetLink)) {
+            // --- 鼠标悬停在有效的选项上 ---
+            const left = targetLink.offsetLeft;
+            const top = targetLink.offsetTop;
+            const width = targetLink.offsetWidth;
+            const height = targetLink.offsetHeight;
+
+            navSlider.style.opacity = '1';
+
+            if (!isInsideNav) {
+                // 初次进入导航区，从 0 伸展
+                navSlider.style.transition = 'none'; 
+                navSlider.style.transform = `translate(${left}px, ${top}px)`;
+                navSlider.style.width = '0px';
+                navSlider.style.height = `${height}px`;
+
+                void navSlider.offsetWidth; 
+
+                navSlider.style.transition = 'width 0.35s cubic-bezier(0.16, 1, 0.3, 1)';
+                navSlider.style.width = `${width}px`;
+                
+                isInsideNav = true;
+            } else {
+                // 相邻选项之间平移滑动
+                navSlider.style.transition = 'transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), width 0.35s cubic-bezier(0.16, 1, 0.3, 1)';
+                navSlider.style.transform = `translate(${left}px, ${top}px)`;
+                navSlider.style.width = `${width}px`;
+            }
+        } else {
+            // --- 鼠标滑动到了 disabled 选项、竖线 | 或者空白间隙上 ---
+            hideSlider();
+        }
+    });
+
+    // --- 鼠标彻底离开底部导航区域 ---
+    footerNav.addEventListener('mouseleave', hideSlider);
+}
