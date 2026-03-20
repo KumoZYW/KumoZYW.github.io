@@ -260,45 +260,6 @@ header {
     margin-top: 0;
 }
 
-@media (max-width: 960px) {
-    header {
-        padding: 15px 20px !important;
-        /* 将左右边距从 40px 缩小到 20px */
-    }
-
-    .menu-header {
-        padding: 15px 20px !important;
-        /* 缩小侧边栏头部的左右边距 */
-    }
-
-    /* 侧边栏变得更宽，留给主页的缝隙变小 */
-    .side-menu {
-        width: calc(100% - 60px);
-    }
-
-    /* 配合侧边栏，主页面向左移动的距离加大 */
-    .main-wrapper.menu-open {
-        transform: translateX(calc(-100% ));
-    }
-
-    .menu-slogan {
-        top: auto;
-        bottom: 120px;
-        left: 20px;
-        transform: none;
-        font-size: 2rem;
-        gap: 5px;
-    }
-
-    .menu-content {
-        justify-content: flex-start;
-        /* 取消原来的垂直居中，改为整体靠上对齐 */
-        padding-top: 15%;
-        /* 控制距离顶部的距离 */
-        padding-left: 30%;
-    }
-}
-
 .large-links {
     display: flex;
     flex-direction: column;
@@ -513,30 +474,6 @@ header {
     color: #ffffff;
 }
 
-@media (max-width: 960px) {
-    .footer-top {
-        flex-direction: column;
-        gap: 40px;
-    }
-
-    .footer-bottom {
-        flex-direction: column;
-        gap: 20px;
-        text-align: center;
-    }
-
-    .mariana-text {
-        position: static;
-        transform: none;
-    }
-
-    .footer-nav a {
-        letter-spacing: 10px;
-        /* 减小字间距，适应换行后的视觉效果 */
-        padding: 0 10px 0 20px;
-    }
-}
-
 /* ----------------------------------
            页面主容器与新增功能
 ---------------------------------- */
@@ -628,17 +565,6 @@ header {
     max-width: 800px;
     /* 宽度 */
     margin: 0 auto;
-}
-
-@media (max-width: 960px) {
-    .science-intro h1 {
-        font-size: 2rem;
-    }
-
-    .science-intro p {
-        font-size: 0.9rem;
-        padding: 0 20px;
-    }
 }
 
 /* Works 模块 沿用原格式并调整 */
@@ -783,48 +709,6 @@ header {
     margin-left: auto;
 }
 
-/* Works 模块响应式调整 */
-@media (max-width: 960px) {
-    .works-container {
-        flex-direction: column;
-        gap: 40px;
-    }
-
-    .works-sidebar {
-        flex: none;
-        flex-direction: row;
-        padding-top: 0;
-        align-items: center;
-    }
-
-    .sidebar-text {
-        writing-mode: horizontal-tb;
-        transform: none;
-    }
-
-    .sidebar-line {
-        width: 30px;
-        height: 2px;
-    }
-
-    .work-header {
-        flex-direction: column;
-        gap: 10px;
-        padding: 20px 0;
-    }
-
-    .work-author,
-    .work-date {
-        flex: none;
-        font-size: 0.9rem;
-    }
-
-    .work-img-wrapper {
-        width: 100%;
-        height: auto;
-    }
-}
-
 /* ----------------------------------
            Gallery 流动图库模块
 ---------------------------------- */
@@ -896,12 +780,6 @@ header {
     }
 }
 
-/* 移动端响应式调整：稍微把高度改小一点 */
-@media (max-width: 960px) {
-    .gallery-track img {
-        height: 150px;
-    }
-}
 
 /* ----------------------------------
            左侧 sinc 函数指示器
@@ -960,10 +838,128 @@ body.no-scroll #sinc-indicator {
     transform: translateX(5px);
 }
 
+/* ----------------------------------
+           移动端响应式调整
+---------------------------------- */
+
 @media (max-width: 1200px) {
     #sinc-indicator {
         display: none;
     }
 
     /* 较小屏幕隐藏 */
+}
+
+@media (max-width: 960px) {
+    header {
+        padding: 15px 20px !important;
+        /* 将左右边距从 40px 缩小到 20px */
+    }
+
+    .menu-header {
+        padding: 15px 20px !important;
+        /* 缩小侧边栏头部的左右边距 */
+    }
+
+    /* 侧边栏变得更宽，留给主页的缝隙变小 */
+    .side-menu {
+        width: calc(100% - 60px);
+    }
+
+    /* 配合侧边栏，主页面向左移动的距离加大 */
+    .main-wrapper.menu-open {
+        transform: translateX(calc(-100% + 75px));
+    }
+
+    .menu-slogan {
+        top: auto;
+        bottom: 120px;
+        left: 20px;
+        transform: none;
+        font-size: 2rem;
+        gap: 5px;
+    }
+
+    .menu-content {
+        justify-content: flex-start;
+        /* 取消原来的垂直居中，改为整体靠上对齐 */
+        padding-top: 15%;
+        /* 控制距离顶部的距离 */
+        padding-left: 30%;
+    }
+
+    .science-intro h1 {
+        font-size: 2rem;
+    }
+
+    .science-intro p {
+        font-size: 0.9rem;
+        padding: 0 20px;
+    }
+
+    /* Works 模块响应式调整 */
+    .works-container {
+        flex-direction: column;
+        gap: 40px;
+    }
+
+    .works-sidebar {
+        flex: none;
+        flex-direction: row;
+        padding-top: 0;
+        align-items: center;
+    }
+
+    .sidebar-text {
+        writing-mode: horizontal-tb;
+        transform: none;
+    }
+
+    .sidebar-line {
+        width: 30px;
+        height: 2px;
+    }
+
+    .work-header {
+        flex-direction: column;
+        gap: 10px;
+        padding: 20px 0;
+    }
+
+    .work-author,
+    .work-date {
+        flex: none;
+        font-size: 0.9rem;
+    }
+
+    .work-img-wrapper {
+        width: 100%;
+        height: auto;
+    }
+
+        .footer-top {
+        flex-direction: column;
+        gap: 40px;
+    }
+
+    .footer-bottom {
+        flex-direction: column;
+        gap: 20px;
+        text-align: center;
+    }
+
+    .mariana-text {
+        position: static;
+        transform: none;
+    }
+
+    .footer-nav a {
+        letter-spacing: 10px;
+        /* 减小字间距，适应换行后的视觉效果 */
+        padding: 0 10px 0 20px;
+    }
+
+        .gallery-track img {
+        height: 150px;
+    }
 }
