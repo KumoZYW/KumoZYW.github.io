@@ -873,11 +873,15 @@ body.no-scroll #sinc-indicator {
 
     .menu-slogan {
         top: auto;
-        bottom: 120px;
+        bottom: 5%;
         left: 20px;
         transform: none;
         font-size: 2rem;
         gap: 5px;
+    }
+
+    .large-links {
+        margin-bottom: 30px;
     }
 
     .menu-content {
@@ -937,7 +941,7 @@ body.no-scroll #sinc-indicator {
         height: auto;
     }
 
-        .footer-top {
+    .footer-top {
         flex-direction: column;
         gap: 40px;
     }
@@ -959,7 +963,7 @@ body.no-scroll #sinc-indicator {
         padding: 0 10px 0 20px;
     }
 
-        .gallery-track img {
+    .gallery-track img {
         height: 150px;
     }
 }

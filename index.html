@@ -291,45 +291,6 @@
             /* 调整顶部间距 */
         }
 
-        @media (max-width: 960px) {
-            header {
-                padding: 15px 20px !important;
-                /* 将左右边距从 40px 缩小到 20px */
-            }
-
-            .menu-header {
-                padding: 15px 20px !important;
-                /* 缩小侧边栏头部的左右边距 */
-            }
-
-            /* 侧边栏变得更宽，留给主页的缝隙变小 */
-            .side-menu {
-                width: calc(100% - 60px);
-            }
-
-            /* 配合侧边栏，主页面向左移动的距离加大 */
-            .main-wrapper.menu-open {
-                transform: translateX(calc(-100% + 75px));
-            }
-
-            .menu-slogan {
-                top: auto;
-                bottom: 120px;
-                left: 20px;
-                transform: none;
-                font-size: 2rem;
-                gap: 5px;
-            }
-
-            .menu-content {
-                justify-content: flex-start;
-                /* 取消原来的垂直居中，改为整体靠上对齐 */
-                padding-top: 15%;
-                /* 控制距离顶部的距离 */
-                padding-left: 30%;
-            }
-        }
-
         .nav-label {
             font-size: 12px;
             letter-spacing: 1px;
@@ -686,52 +647,6 @@
             transform: scale(1.02);
         }
 
-        /* 响应式调整 */
-        @media (max-width: 960px) {
-            .arrow-left {
-                left: 0px;
-            }
-
-            .arrow-right {
-                right: 0px;
-            }
-
-            .about-container {
-                flex-direction: column;
-                gap: 40px;
-            }
-
-            .about-sidebar {
-                flex: none;
-                padding-top: 0;
-                flex-direction: row;
-                /* 在移动端将线和字排成一行 */
-                align-items: center;
-            }
-
-            .sidebar-line {
-                width: 30px;
-                /* 在移动端线恢复为水平且长度固定 */
-                height: 2px;
-            }
-
-            .sidebar-text {
-                writing-mode: horizontal-tb;
-                transform: none;
-            }
-
-            .about-image-wrapper {
-                max-width: 100%;
-                order: -1;
-                /* 在移动端让图片排在上方 */
-                padding-top: 0;
-            }
-
-            .about-content {
-                padding-right: 0;
-            }
-        }
-
         /* ----------------------------------
             全新的 Works 模块
             ---------------------------------- */
@@ -851,39 +766,6 @@
             /*添加圆角属性 */
             display: block;
             margin-left: auto;
-        }
-
-        /* Works 模块响应式调整 */
-        @media (max-width: 960px) {
-            .works-container {
-                flex-direction: column;
-                gap: 40px;
-            }
-
-            .works-sidebar {
-                flex: none;
-                flex-direction: row;
-                padding-top: 0;
-                align-items: center;
-            }
-
-            .work-header {
-                flex-direction: column;
-                gap: 10px;
-                padding: 20px 0;
-            }
-
-            .work-author,
-            .work-date {
-                flex: none;
-                font-size: 0.9rem;
-            }
-
-            .work-img-wrapper {
-                width: 100%;
-                height: auto;
-                /* 移动端图片占满全宽 */
-            }
         }
 
         /* ----------------------------------
@@ -1030,8 +912,122 @@
             color: #ffffff;
         }
 
-        /* 页脚响应式调整 */
+        /* 响应式调整 */
         @media (max-width: 960px) {
+            header {
+                padding: 15px 20px !important;
+                /* 将左右边距从 40px 缩小到 20px */
+            }
+
+            .menu-header {
+                padding: 15px 20px !important;
+                /* 缩小侧边栏头部的左右边距 */
+            }
+
+            /* 侧边栏变得更宽，留给主页的缝隙变小 */
+            .side-menu {
+                width: calc(100% - 60px);
+            }
+
+            /* 配合侧边栏，主页面向左移动的距离加大 */
+            .main-wrapper.menu-open {
+                transform: translateX(calc(-100% + 75px));
+            }
+
+            .menu-slogan {
+                top: auto;
+                bottom: 5%;
+                left: 20px;
+                transform: none;
+                font-size: 2rem;
+                gap: 5px;
+            }
+
+            .large-links {
+                margin-bottom: 30px;
+            }
+
+            .menu-content {
+                justify-content: flex-start;
+                /* 取消原来的垂直居中，改为整体靠上对齐 */
+                padding-top: 15%;
+                /* 控制距离顶部的距离 */
+                padding-left: 30%;
+            }
+
+            .arrow-left {
+                left: 0px;
+            }
+
+            .arrow-right {
+                right: 0px;
+            }
+
+            .about-container {
+                flex-direction: column;
+                gap: 40px;
+            }
+
+            .about-sidebar {
+                flex: none;
+                padding-top: 0;
+                flex-direction: row;
+                /* 在移动端将线和字排成一行 */
+                align-items: center;
+            }
+
+            .sidebar-line {
+                width: 30px;
+                /* 在移动端线恢复为水平且长度固定 */
+                height: 2px;
+            }
+
+            .sidebar-text {
+                writing-mode: horizontal-tb;
+                transform: none;
+            }
+
+            .about-image-wrapper {
+                max-width: 100%;
+                order: -1;
+                /* 在移动端让图片排在上方 */
+                padding-top: 0;
+            }
+
+            .about-content {
+                padding-right: 0;
+            }
+
+            .works-container {
+                flex-direction: column;
+                gap: 40px;
+            }
+
+            .works-sidebar {
+                flex: none;
+                flex-direction: row;
+                padding-top: 0;
+                align-items: center;
+            }
+
+            .work-header {
+                flex-direction: column;
+                gap: 10px;
+                padding: 20px 0;
+            }
+
+            .work-author,
+            .work-date {
+                flex: none;
+                font-size: 0.9rem;
+            }
+
+            .work-img-wrapper {
+                width: 100%;
+                height: auto;
+                /* 移动端图片占满全宽 */
+            }
+
             .footer-top {
                 flex-direction: column;
                 gap: 40px;
